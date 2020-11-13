@@ -14,7 +14,7 @@ def apiOverview(request):
     api_urls = {
         'List': '/notes-list/',
         'Create': '/notes-create/',
-        #'Update': '/notes-update/<str:pk>/',
+        'Update': '/notes-update/<str:pk>/',
         #'Delete': '/notes-delete/<str:pk>/',
     }
     return Response(api_urls)
@@ -28,6 +28,15 @@ def NoteList(request):
 @api_view(['POST'])
 def NoteCreate(request):
     serializer = NoteSerializer(data=request.data)
+
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
+
+@api_view(['PUT'])
+def NoteUpdate(request, pk):
+    note = Note.objects.get(id=pk)
+    serializer = NoteSerializer(instance=note, data=request.data)
 
     if serializer.is_valid():
         serializer.save()
