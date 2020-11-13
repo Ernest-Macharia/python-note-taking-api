@@ -15,7 +15,7 @@ def apiOverview(request):
         'List': '/notes-list/',
         'Create': '/notes-create/',
         'Update': '/notes-update/<str:pk>/',
-        #'Delete': '/notes-delete/<str:pk>/',
+        'Delete': '/notes-delete/<str:pk>/',
     }
     return Response(api_urls)
 
@@ -41,3 +41,9 @@ def NoteUpdate(request, pk):
     if serializer.is_valid():
         serializer.save()
     return Response(serializer.data)
+
+@api_view(['DELETE'])
+def NoteDelete(request, pk):
+    note = Note.objects.get(id=pk)
+    note.delete()
+    return Response("Note Deleted Successfully")
